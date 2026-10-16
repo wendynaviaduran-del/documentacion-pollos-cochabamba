@@ -11,8 +11,8 @@
             --bg: #f8f9fa;
             --card-bg: #ffffff;
             --border: #e0e0e0;
-            --code-bg: #272822;
-            --code-color: #f8f8f2;
+            --code-bg: #1e1e1e;
+            --code-color: #d4d4d4;
         }
 
         body {
@@ -37,20 +37,43 @@
             border-bottom: 3px solid var(--primary);
             padding-bottom: 20px;
             margin-bottom: 30px;
+            text-align: center;
         }
 
         h1 {
             color: var(--primary);
-            margin: 0 0 10px 0;
+            margin: 10px 0;
             font-size: 2em;
+        }
+
+        .university-header {
+            font-weight: bold;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.1em;
         }
 
         .meta-info {
             background: #fff3cd;
             border-left: 4px solid #ffc107;
-            padding: 15px;
+            padding: 20px;
             margin-bottom: 30px;
             border-radius: 4px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .team-member {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 0.95em;
         }
 
         h2 {
@@ -61,7 +84,7 @@
         }
 
         h3 {
-            color: #555;
+            color: #444;
             margin-top: 25px;
         }
 
@@ -69,6 +92,7 @@
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
+            font-size: 0.95em;
         }
 
         th, td {
@@ -92,6 +116,7 @@
             border-radius: 4px;
             color: white;
             font-size: 0.85em;
+            display: inline-block;
         }
 
         .get { background-color: #61affe; }
@@ -105,19 +130,22 @@
             padding: 15px;
             border-radius: 6px;
             overflow-x: auto;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            font-size: 0.9em;
         }
 
         code {
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
             background: #eef;
             padding: 2px 5px;
             border-radius: 3px;
+            color: #c7254e;
         }
 
         pre code {
             background: transparent;
             padding: 0;
+            color: inherit;
         }
 
         ul, ol {
@@ -127,49 +155,96 @@
         li {
             margin-bottom: 8px;
         }
+
+        .security-box {
+            background: #e8f4f8;
+            border-left: 4px solid #2980b9;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>Pollos Cochabamba — Sistema de Ventas e Inventario</h1>
+        <div class="university-header">Universidad Tecnológica Boliviana</div>
+        <h1>SISTEMA DE VENTAS E INVENTARIO — POLLOS COCHABAMBA</h1>
         <p><strong>Documentación Técnica de la API REST e Informe de Laboratorio</strong></p>
     </header>
 
     <div class="meta-info">
-        <p><strong>Materia:</strong> Arquitectura de Sistemas / Desarrollo de Software</p>
-        <p><strong>Tecnologías:</strong> Python, Flask, SQLite, HTML5, CSS3, JavaScript, HTTP / JSON</p>
-        <p><strong>Cierre de Entrega:</strong> 16 de Octubre de 2026, 23:59</p>
+        <p><strong>Carrera:</strong> Ingeniería en Ciberseguridad e Informática</p>
+        <p><strong>Materia:</strong> Seguridad e Integración de Sistemas</p>
+        <p><strong>Docente:</strong> Ing. Pablo Alexander Mujica Laime</p>
+        <p><strong>Ubicación y Fecha:</strong> La Paz – 2026</p>
+        
+        <hr style="border: 0; border-top: 1px solid #ffeeba; margin: 15px 0;">
+        
+        <strong>Integrantes del Grupo:</strong>
+        <div class="team-grid">
+            <div class="team-member">• Fabián Ignacio López Tito</div>
+            <div class="team-member">• Mael Angel Vladimiro Paco Yujra</div>
+            <div class="team-member">• Jacel Wendy Navia Duran</div>
+            <div class="team-member">• Juana Chura Cruz</div>
+            <div class="team-member">• Diego Javier Gutierrez Quispe</div>
+            <div class="team-member">• Angel Joel Coaquira Condori</div>
+            <div class="team-member">• Jhonatan Elio Vasquez Mamani</div>
+        </div>
     </div>
 
     <section>
-        <h2>1. Introducción y Objetivos</h2>
-        <h3>1.1 Introducción</h3>
-        <p>El presente proyecto implementa la integración de las áreas operativas de <strong>Ventas, Almacén/Cocina y Contabilidad</strong> de la empresa <em>Pollos Cochabamba</em>. La arquitectura se basa en un servicio web <strong>API REST</strong> desarrollado en Python con Flask, permitiendo el intercambio bidireccional de información mediante formato JSON sobre el protocolo HTTP en red local.</p>
-
-        <h3>1.2 Objetivos</h3>
-        <ul>
-            <li>Desarrollar una API REST centralizada para la gestión de productos, inventario y ventas.</li>
-            <li>Sincronizar el inventario en tiempo real descontando automáticamente el stock tras cada venta.</li>
-            <li>Conectar las áreas de Caja, Almacén y Contabilidad en red local LAN mediante direcciones IP (`0.0.0.0:5000`).</li>
-        </ul>
-    </section>
-
-    <section>
-        <h2>2. Integración Empresarial entre Áreas</h2>
-        <p>La API actúa como el núcleo del sistema recibiendo solicitudes de las distintas áreas:</p>
-        <ul>
-            <li><strong>Caja / Punto de Venta:</strong> Envía peticiones <code>POST /api/v1/ventas</code> para procesar cobros en Bolivianos (Bs).</li>
-            <li><strong>Almacén / Cocina:</strong> Consulta disponibilidad mediante <code>GET /api/v1/productos</code> y reabastece stock con <code>PUT /api/v1/productos/&lt;id&gt;</code> o entradas de inventario.</li>
-            <li><strong>Contabilidad:</strong> Consume <code>GET /api/v1/ventas</code> para extraer los ingresos totales en Bs para el balance diario.</li>
-        </ul>
-    </section>
-
-    <section>
-        <h2>3. Documentación Técnica de Endpoints (Rutas de la API)</h2>
+        <h2>1. Descripción del Sistema e Integración Empresarial</h2>
+        <p>El sistema administra los productos del almacén y procesa el registro de ventas de la empresa simulada <strong>Pollos Cochabamba</strong> mediante una aplicación web desarrollada en Python (Flask) y SQLite. El objetivo principal es operar de manera interconectada con áreas externas dentro de la organización:</p>
         
-        <h3>3.1 Gestión de Catálogo e Inventario</h3>
+        <h3>1.1. Integración con Contabilidad y Empleados</h3>
+        <ul>
+            <li><strong>Requerimiento Enviado:</strong> El sistema consulta mediante API la base de datos de Contabilidad/Empleados para identificar al vendedor en turno y generar informes sobre el empleado con mayor volumen de ventas.</li>
+            <li><strong>Requerimiento Recibido:</strong> Contabilidad consume la API REST de Ventas para obtener el registro de transacciones e ingresos totales en Bolivianos (Bs) requeridos en sus balances financieros.</li>
+        </ul>
+
+        <h3>1.2. Integración con Marketing</h3>
+        <ul>
+            <li><strong>Requerimiento Recibido:</strong> El área de Marketing se conecta a la API para consultar las existencias del catálogo (pollo, papas, bebidas) y diseñar combos, promociones y campañas publicitarias según el stock disponible.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>2. Herramientas y Tecnologías Utilizadas</h2>
+        <ul>
+            <li><strong>Python:</strong> Lenguaje principal en la programación de la lógica de negocio (Backend).</li>
+            <li><strong>Flask:</strong> Microframework para la construcción de rutas web y endpoints de la API REST.</li>
+            <li><strong>SQLite 3:</strong> Motor de base de datos relacional almacenado localmente en <code>inventario_demo.sqlite3</code>.</li>
+            <li><strong>HTML5 & JavaScript (ES6+):</strong> Interfaz de usuario dinámica con peticiones asíncronas (Fetch API).</li>
+            <li><strong>Waitress:</strong> Servidor WSGI de grado de producción para la ejecución sobre Windows/Linux en red local.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>3. Funcionamiento Interno y Flujo de Trabajo</h2>
+        
+        <h3>3.1. Pantallas Web (Frontend)</h3>
+        <ul>
+            <li><strong>Panel de Inventario (<code>panel.html</code>):</strong> Despliega el catálogo con ID, Nombre, Categoría, Stock base y Presentaciones comerciales. Incluye el botón <em>"Actualizar productos"</em> para recargas asíncronas vía <code>GET /api/v1/productos</code>.</li>
+            <li><strong>Formulario de Registro (<code>ventas.html</code>):</strong> Captura el vendedor, producto, presentación y cantidad (admitiendo decimales para kilogramos y enteros para unidades). Al enviar, invoca el endpoint <code>POST /api/v1/ventas</code>.</li>
+            <li><strong>Historial de Ventas:</strong> Lista las órdenes en estado Pendiente o Pagada, permitiendo acciones de cobro o anulación mediante peticiones <code>PUT</code>.</li>
+        </ul>
+
+        <h3>3.2. Flujo de Procesamiento en Backend</h3>
+        <ol>
+            <li>Verificación de existencia, estado activo y fecha de vencimiento del producto.</li>
+            <li>Conversión de la cantidad solicitada (ej. 1.5 kg) a unidades base internas (1500 g) utilizando el <code>factor_base</code>.</li>
+            <li>Validación de suficiencia de stock en la base de datos.</li>
+            <li>Descuento inmediato del stock base y creación de la orden en estado <code>PENDIENTE</code>.</li>
+            <li>Registro automático de auditoría de entrada/salida en la tabla <code>movimientos</code>.</li>
+        </ol>
+    </section>
+
+    <section>
+        <h2>4. Especificación de Endpoints y Métodos HTTP</h2>
+
+        <h3>4.1. Consultas (Método GET)</h3>
         <table>
             <thead>
                 <tr>
@@ -182,27 +257,32 @@
                 <tr>
                     <td><span class="method get">GET</span></td>
                     <td><code>/api/v1/productos</code></td>
-                    <td>Consulta el catálogo completo de combos y piezas.</td>
+                    <td>Retorna el listado completo de productos activos y sus presentaciones.</td>
                 </tr>
                 <tr>
-                    <td><span class="method post">POST</span></td>
-                    <td><code>/api/v1/productos</code></td>
-                    <td>Registra un nuevo producto o combo en el menú.</td>
-                </tr>
-                <tr>
-                    <td><span class="method put">PUT</span></td>
+                    <td><span class="method get">GET</span></td>
                     <td><code>/api/v1/productos/&lt;id&gt;</code></td>
-                    <td>Modifica precio en Bs o reabastece el stock.</td>
+                    <td>Obtiene los detalles específicos de un producto por su ID.</td>
                 </tr>
                 <tr>
-                    <td><span class="method delete">DELETE</span></td>
-                    <td><code>/api/v1/productos/&lt;id&gt;</code></td>
-                    <td>Elimina o desactiva un producto mediante su ID.</td>
+                    <td><span class="method get">GET</span></td>
+                    <td><code>/api/v1/inventario</code></td>
+                    <td>Consulta el estado global del inventario en almacén.</td>
+                </tr>
+                <tr>
+                    <td><span class="method get">GET</span></td>
+                    <td><code>/api/v1/ventas</code></td>
+                    <td>Obtiene el historial de ventas registradas.</td>
+                </tr>
+                <tr>
+                    <td><span class="method get">GET</span></td>
+                    <td><code>/api/v1/reportes/ventas-empleados</code></td>
+                    <td>Genera el consolidado de ventas por vendedor (para Contabilidad).</td>
                 </tr>
             </tbody>
         </table>
 
-        <h3>3.2 Gestión de Ventas</h3>
+        <h3>4.2. Registro y Creación (Método POST)</h3>
         <table>
             <thead>
                 <tr>
@@ -215,71 +295,98 @@
                 <tr>
                     <td><span class="method post">POST</span></td>
                     <td><code>/api/v1/ventas</code></td>
-                    <td>Registra una venta y descuenta inventario automáticamente.</td>
+                    <td>Registra una nueva venta, descuenta stock y crea movimientos.</td>
                 </tr>
                 <tr>
-                    <td><span class="method get">GET</span></td>
-                    <td><code>/api/v1/ventas</code></td>
-                    <td>Consulta el historial completo de ventas realizadas.</td>
+                    <td><span class="method post">POST</span></td>
+                    <td><code>/api/v1/productos</code></td>
+                    <td>Registra un nuevo producto en la base de datos.</td>
                 </tr>
+                <tr>
+                    <td><span class="method post">POST</span></td>
+                    <td><code>/api/v1/inventario/entradas</code></td>
+                    <td>Registra el reabastecimiento de mercancía al almacén.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>4.3. Modificación y Desactivación (Métodos PUT / DELETE)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Método</th>
+                    <th>Ruta / Endpoint</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
                 <tr>
                     <td><span class="method put">PUT</span></td>
                     <td><code>/api/v1/ventas/&lt;id&gt;/pagar</code></td>
-                    <td>Modifica el estado de la venta a PAGADA.</td>
+                    <td>Cambia el estado de una venta a <code>PAGADA</code> y registra la fecha.</td>
                 </tr>
                 <tr>
                     <td><span class="method put">PUT</span></td>
                     <td><code>/api/v1/ventas/&lt;id&gt;/anular</code></td>
-                    <td>Anula la venta y reintegra las unidades al stock.</td>
+                    <td>Anula la venta pendiente y reintegra el stock devuelto.</td>
+                </tr>
+                <tr>
+                    <td><span class="method put">PUT</span></td>
+                    <td><code>/api/v1/productos/&lt;id&gt;</code></td>
+                    <td>Modifica datos de un producto (nombre, categoría, vencimiento).</td>
+                </tr>
+                <tr>
+                    <td><span class="method delete">DELETE</span></td>
+                    <td><code>/api/v1/productos/&lt;id&gt;</code></td>
+                    <td>Desactiva lógicamente un producto (<code>activo = 0</code>).</td>
                 </tr>
             </tbody>
         </table>
     </section>
 
     <section>
-        <h2>4. Estructura de Datos e Inventario Inicial</h2>
-        <p>Estructura JSON de cada producto:</p>
-        <pre><code>{
-  "id": 1,
-  "nombre": "Pollo",
-  "categoria": "Carnes",
-  "unidad_base": "g",
-  "stock_base": 100000,
-  "presentaciones": [
-    {
-      "id": 2,
-      "nombre": "Kilogramo",
-      "factor_base": 1000,
-      "precio_bs": "25.00"
-    }
-  ]
-}</code></pre>
+        <h2>5. Estructura de la Base de Datos (DDL SQLite)</h2>
+        <p>El esquema está diseñado en SQLite con restricciones de integridad referencial:</p>
 
-        <h3>Catálogo de Prueba Base</h3>
-        <ul>
-            <li><strong>Combo Económico:</strong> 1 Pieza + Papas (Bs 18.00)</li>
-            <li><strong>Combo Familiar:</strong> 8 Piezas + Papas + Bebida (Bs 85.00)</li>
-            <li><strong>Balde Cochabamba:</strong> 12 Piezas (Bs 110.00)</li>
-        </ul>
+        <pre><code>CREATE TABLE productos (
+    id INTEGER PRIMARY KEY,
+    nombre TEXT NOT NULL,
+    categoria TEXT NOT NULL,
+    unidad_base TEXT NOT NULL CHECK (unidad_base IN ('g', 'unidad')),
+    stock_base INTEGER NOT NULL DEFAULT 0 CHECK (stock_base >= 0),
+    vence TEXT,
+    activo INTEGER NOT NULL DEFAULT 1
+);
+
+CREATE TABLE presentaciones (
+    id INTEGER PRIMARY KEY,
+    producto_id INTEGER NOT NULL REFERENCES productos(id),
+    nombre TEXT NOT NULL,
+    factor_base INTEGER NOT NULL CHECK (factor_base > 0),
+    precio_bs TEXT NOT NULL
+);
+
+CREATE TABLE ventas (
+    id INTEGER PRIMARY KEY,
+    empleado_id TEXT NOT NULL,
+    fecha_venta TEXT NOT NULL,
+    fecha_pago TEXT,
+    estado TEXT NOT NULL,
+    monto_total_bs TEXT NOT NULL
+);</code></pre>
     </section>
 
     <section>
-        <h2>5. Flujo de Trabajo en Ventas</h2>
-        <ol>
-            <li><strong>Petición:</strong> El cajero envía <code>POST /api/v1/ventas</code> con <code>empleado_id</code> y los detalles del pedido.</li>
-            <li><strong>Validación:</strong> La API verifica que el producto no esté vencido y que el <code>stock_base</code> sea suficiente.</li>
-            <li><strong>Cálculo y Descuento:</strong> Multiplica la cantidad por el precio unitario en Bs y resta automáticamente del inventario.</li>
-            <li><strong>Respuesta:</strong> Retorna confirmación HTTP <code>201 Created</code> con el desglose del cobro.</li>
-        </ol>
-    </section>
-
-    <section>
-        <h2>6. Lista de Entregables Requeridos</h2>
-        <ol>
-            <li><strong>Enlace a la Documentación Técnica:</strong> Publicar este contenido en GitHub Pages.</li>
-            <li><strong>Informe del Laboratorio:</strong> Exportar este documento a PDF para adjuntarlo en Moodle.</li>
-            <li><strong>Sistema completo en RAR:</strong> Archivo <code>.rar</code> con el código fuente y la base de datos.</li>
-        </ol>
+        <h2>6. Seguridad e Integridad Aplicada</h2>
+        <div class="security-box">
+            <ol>
+                <li><strong>Consultas SQL Parametrizadas:</strong> Uso exclusivo de marcadores de posición (<code>?</code>) para blindar el sistema contra Inyección SQL (SQLi).</li>
+                <li><strong>Control de Acceso CORS:</strong> Implementación de <code>flask_cors</code> para autorizar de forma explícita las llamadas HTTP desde los orígenes de las demás áreas.</li>
+                <li><strong>Límite de Tamaño de Petición:</strong> Restricción del Payload a un máximo de 1MB (<code>MAX_CONTENT_LENGTH = 1024 * 1024</code>) para mitigar ataques DoS.</li>
+                <li><strong>Precisión Monetaria con Decimal:</strong> Sustitución de flotantes por el tipo <code>Decimal</code> de Python con redondeo bancario para prevenir discrepancias en centavos.</li>
+                <li><strong>Manejo Centralizado de Excepciones:</strong> Formateo homogéneo de errores en JSON evitando la exposición de trazados de pila (Stack Traces) al cliente.</li>
+            </ol>
+        </div>
     </section>
 </div>
 
