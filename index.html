@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación Técnica e Informe de Laboratorio - Pollos Cochabamba</title>
+    <style>
+        :root {
+            --primary: #d9534f;
+            --secondary: #333;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --border: #e0e0e0;
+            --code-bg: #272822;
+            --code-color: #f8f8f2;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--secondary);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin: 0 0 10px 0;
+            font-size: 2em;
+        }
+
+        .meta-info {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+
+        h2 {
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+            margin-top: 35px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 25px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f1f1f1;
+            color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .method {
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: white;
+            font-size: 0.85em;
+        }
+
+        .get { background-color: #61affe; }
+        .post { background-color: #49cc90; }
+        .put { background-color: #fca130; }
+        .delete { background-color: #f93e3e; }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-color);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background: #eef;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        pre code {
+            background: transparent;
+            padding: 0;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Pollos Cochabamba — Sistema de Ventas e Inventario</h1>
+        <p><strong>Documentación Técnica de la API REST e Informe de Laboratorio</strong></p>
+    </header>
+
+    <div class="meta-info">
+        <p><strong>Materia:</strong> Arquitectura de Sistemas / Desarrollo de Software</p>
+        <p><strong>Tecnologías:</strong> Python, Flask, SQLite, HTML5, CSS3, JavaScript, HTTP / JSON</p>
+        <p><strong>Cierre de Entrega:</strong> 16 de Octubre de 2026, 23:59</p>
+    </div>
+
+    <section>
+        <h2>1. Introducción y Objetivos</h2>
+        <h3>1.1 Introducción</h3>
+        <p>El presente proyecto implementa la integración de las áreas operativas de <strong>Ventas, Almacén/Cocina y Contabilidad</strong> de la empresa <em>Pollos Cochabamba</em>. La arquitectura se basa en un servicio web <strong>API REST</strong> desarrollado en Python con Flask, permitiendo el intercambio bidireccional de información mediante formato JSON sobre el protocolo HTTP en red local.</p>
+
+        <h3>1.2 Objetivos</h3>
+        <ul>
+            <li>Desarrollar una API REST centralizada para la gestión de productos, inventario y ventas.</li>
+            <li>Sincronizar el inventario en tiempo real descontando automáticamente el stock tras cada venta.</li>
+            <li>Conectar las áreas de Caja, Almacén y Contabilidad en red local LAN mediante direcciones IP (`0.0.0.0:5000`).</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>2. Integración Empresarial entre Áreas</h2>
+        <p>La API actúa como el núcleo del sistema recibiendo solicitudes de las distintas áreas:</p>
+        <ul>
+            <li><strong>Caja / Punto de Venta:</strong> Envía peticiones <code>POST /api/v1/ventas</code> para procesar cobros en Bolivianos (Bs).</li>
+            <li><strong>Almacén / Cocina:</strong> Consulta disponibilidad mediante <code>GET /api/v1/productos</code> y reabastece stock con <code>PUT /api/v1/productos/&lt;id&gt;</code> o entradas de inventario.</li>
+            <li><strong>Contabilidad:</strong> Consume <code>GET /api/v1/ventas</code> para extraer los ingresos totales en Bs para el balance diario.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>3. Documentación Técnica de Endpoints (Rutas de la API)</h2>
+        
+        <h3>3.1 Gestión de Catálogo e Inventario</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Método</th>
+                    <th>Ruta / Endpoint</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="method get">GET</span></td>
+                    <td><code>/api/v1/productos</code></td>
+                    <td>Consulta el catálogo completo de combos y piezas.</td>
+                </tr>
+                <tr>
+                    <td><span class="method post">POST</span></td>
+                    <td><code>/api/v1/productos</code></td>
+                    <td>Registra un nuevo producto o combo en el menú.</td>
+                </tr>
+                <tr>
+                    <td><span class="method put">PUT</span></td>
+                    <td><code>/api/v1/productos/&lt;id&gt;</code></td>
+                    <td>Modifica precio en Bs o reabastece el stock.</td>
+                </tr>
+                <tr>
+                    <td><span class="method delete">DELETE</span></td>
+                    <td><code>/api/v1/productos/&lt;id&gt;</code></td>
+                    <td>Elimina o desactiva un producto mediante su ID.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>3.2 Gestión de Ventas</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Método</th>
+                    <th>Ruta / Endpoint</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="method post">POST</span></td>
+                    <td><code>/api/v1/ventas</code></td>
+                    <td>Registra una venta y descuenta inventario automáticamente.</td>
+                </tr>
+                <tr>
+                    <td><span class="method get">GET</span></td>
+                    <td><code>/api/v1/ventas</code></td>
+                    <td>Consulta el historial completo de ventas realizadas.</td>
+                </tr>
+                <tr>
+                    <td><span class="method put">PUT</span></td>
+                    <td><code>/api/v1/ventas/&lt;id&gt;/pagar</code></td>
+                    <td>Modifica el estado de la venta a PAGADA.</td>
+                </tr>
+                <tr>
+                    <td><span class="method put">PUT</span></td>
+                    <td><code>/api/v1/ventas/&lt;id&gt;/anular</code></td>
+                    <td>Anula la venta y reintegra las unidades al stock.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>4. Estructura de Datos e Inventario Inicial</h2>
+        <p>Estructura JSON de cada producto:</p>
+        <pre><code>{
+  "id": 1,
+  "nombre": "Pollo",
+  "categoria": "Carnes",
+  "unidad_base": "g",
+  "stock_base": 100000,
+  "presentaciones": [
+    {
+      "id": 2,
+      "nombre": "Kilogramo",
+      "factor_base": 1000,
+      "precio_bs": "25.00"
+    }
+  ]
+}</code></pre>
+
+        <h3>Catálogo de Prueba Base</h3>
+        <ul>
+            <li><strong>Combo Económico:</strong> 1 Pieza + Papas (Bs 18.00)</li>
+            <li><strong>Combo Familiar:</strong> 8 Piezas + Papas + Bebida (Bs 85.00)</li>
+            <li><strong>Balde Cochabamba:</strong> 12 Piezas (Bs 110.00)</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>5. Flujo de Trabajo en Ventas</h2>
+        <ol>
+            <li><strong>Petición:</strong> El cajero envía <code>POST /api/v1/ventas</code> con <code>empleado_id</code> y los detalles del pedido.</li>
+            <li><strong>Validación:</strong> La API verifica que el producto no esté vencido y que el <code>stock_base</code> sea suficiente.</li>
+            <li><strong>Cálculo y Descuento:</strong> Multiplica la cantidad por el precio unitario en Bs y resta automáticamente del inventario.</li>
+            <li><strong>Respuesta:</strong> Retorna confirmación HTTP <code>201 Created</code> con el desglose del cobro.</li>
+        </ol>
+    </section>
+
+    <section>
+        <h2>6. Lista de Entregables Requeridos</h2>
+        <ol>
+            <li><strong>Enlace a la Documentación Técnica:</strong> Publicar este contenido en GitHub Pages.</li>
+            <li><strong>Informe del Laboratorio:</strong> Exportar este documento a PDF para adjuntarlo en Moodle.</li>
+            <li><strong>Sistema completo en RAR:</strong> Archivo <code>.rar</code> con el código fuente y la base de datos.</li>
+        </ol>
+    </section>
+</div>
+
+</body>
+</html>
